@@ -1,4 +1,3 @@
-
 // =====================================
 // KONEKSI DATABASE GAMBARIN!
 // =====================================
@@ -6,28 +5,25 @@
 const supabaseUrl = "https://ipfluhoiwibedcouypyy.supabase.co";
 const supabaseKey = "sb_publishable_Gp1Nngbw5qLT4NXv6LCIUg_XqG5sWqu";
 
-// =====================================
-// CEK LIBRARY SUPABASE
-// =====================================
+console.log("Memeriksa library Supabase...");
+console.log("Supabase library:", window.supabase);
 
-(function initSupabaseClient() {
-    try {
-        if (!window.supabase || typeof window.supabase.createClient !== "function") {
-            console.error("Library Supabase gagal dimuat. Pastikan CDN supabase-js dapat diakses.");
-            window.supabaseClient = null;
-            window.supabaseClientError = new Error("Library Supabase gagal dimuat. Periksa koneksi internet atau akses ke CDN Supabase.");
-            return;
-        }
-
-        window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-        window.supabaseClientError = null;
-        console.log("Supabase berhasil terhubung!");
-    } catch (error) {
-        console.error("Gagal membuat Supabase client:", error);
-        window.supabaseClient = null;
-        window.supabaseClientError = error;
+try {
+    if (!window.supabase || typeof window.supabase.createClient !== "function") {
+        throw new Error("Library Supabase CDN tidak berhasil dimuat.");
     }
-})();
 
-// Alias global untuk kompatibilitas script lain
-var supabaseClient = window.supabaseClient;
+    window.supabaseClient = window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
+
+    window.supabaseClientError = null;
+
+    console.log("Supabase client berhasil dibuat!");
+} catch (error) {
+    window.supabaseClient = null;
+    window.supabaseClientError = error;
+
+    console.error("Gagal membuat Supabase client:", error);
+}
