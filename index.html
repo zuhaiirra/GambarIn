@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GambarIn! - Digital Art Marketplace</title>
+
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- WATERMARK & ARTWORK MODAL STYLE -->
+    <style>
+        .creator-watermark {
+            position: fixed;
+            bottom: 18px;
+            right: 20px;
+            z-index: 9999;
+            padding: 8px 14px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 0.3px;
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+        }
+
+        .creator-watermark span {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .artwork-loading,
+        .artwork-empty,
+        .artwork-error {
+            width: 100%;
+            padding: 40px 20px;
+            text-align: center;
+            color: #777;
+            grid-column: 1 / -1;
+        }
+
+        .artwork-error {
+            color: #c0392b;
+        }
+
+        .artwork-card {
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .artwork-card:focus-visible {
+            outline: 3px solid #8b70c9;
+            outline-offset: 4px;
+        }
+
+        .artwork-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .artwork-category {
+            display: inline-block;
+            margin: 5px 0 8px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #f0eafa;
+            color: #7657a8;
+            font-size: 11px;
+        }
+
+        /* DETAIL ARTWORK MODAL */
+        .artwork-detail-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.65);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .artwork-detail-modal.active {
+            display: flex;
+        }
+
+        .artwork-detail-content {
+            position: relative;
+            width: 100%;
+            max-width: 850px;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #fff;
+            border-radius: 18px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .artwork-detail-image {
+            min-height: 350px;
+            background: #f4f1f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 18px 0 0 18px;
+        }
+
+        .artwork-detail-image img {
+            width: 100%;
+            height: 100%;
+            max-height: 550px;
+            object-fit: contain;
+        }
+
+        .artwork-detail-info {
+            padding: 35px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .artwork-detail-info h2 {
+            margin: 10px 0;
+            font-size: 25px;
+            color: #292333;
+        }
+
+        .artwork-detail-info p {
+            color: #777;
+            line-height: 1.7;
+            font-size: 13px;
+        }
+
+        .artwork-detail-seller {
+            font-weight: 600;
+            color: #7657a8 !important;
+        }
+
+        .artwork-detail-price {
+            display: block;
+            margin: 18px 0;
+            font-size: 22px;
+            color: #7657a8;
+        }
+
+        .artwork-detail-order {
+            border: none;
+            padding: 13px 20px;
+            border-radius: 10px;
+            background: #7657a8;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .artwork-detail-order:hover {
+            background: #5d438b;
+        }
+
+        .artwork-detail-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            z-index: 2;
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 25px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 650px) {
+            .artwork-detail-content {
+                grid-template-columns: 1fr;
+                max-width: 430px;
+            }
+
+            .artwork-detail-image {
+                min-height: 250px;
+                max-height: 300px;
+                border-radius: 18px 18px 0 0;
+            }
+
+            .artwork-detail-image img {
+                max-height: 300px;
+            }
+
+            .artwork-detail-info {
+                padding: 25px 22px;
+            }
+
+            .artwork-detail-info h2 {
+                font-size: 21px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .creator-watermark {
+                bottom: 12px;
+                right: 12px;
+                font-size: 9px;
+                padding: 6px 11px;
+            }
+
+            .artwork-detail-modal {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">GambarIn<span>!</span></a>
+
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#explore">Explore</a>
+                <a href="#about">About</a>
+            </div>
+
+            <div class="nav-buttons" id="navButtons">
+                <button class="btn-login">Login</button>
+                <button class="btn-register">Register</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- HERO SECTION -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="hero-label">DIGITAL ART MARKETPLACE</p>
+
+                <h1>
+                    Your Imagination,
+                    <span>Our Creation.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Temukan ilustrasi digital unik atau jual
+                    karya kreatifmu bersama GambarIn!
+                </p>
+
+                <a href="#explore" class="btn-explore">
+                    Explore Artwork
+                </a>
+            </div>
+        </section>
+
+        <!-- EXPLORE SECTION -->
+        <section class="explore" id="explore">
+
+            <div class="section-heading">
+                <p>OUR COLLECTION</p>
+                <h2>Explore Artwork</h2>
+                <span>
+                    Temukan berbagai karya ilustrasi dari
+                    kreator berbakat.
+                </span>
+            </div>
+
+            <!-- ARTWORK DARI SUPABASE -->
+            <div class="artwork-container" id="artworkContainer">
+                <div class="artwork-loading">
+                    Memuat karya dari para kreator...
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section class="about" id="about">
+            <p>ABOUT US</p>
+            <h2>Creativity Has No Limits.</h2>
+
+            <p>
+                GambarIn! merupakan platform marketplace
+                digital yang menghubungkan ilustrator dengan
+                pembeli untuk menemukan dan menawarkan
+                berbagai karya ilustrasi digital.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 GambarIn! Digital Art Marketplace.</p>
+    </footer>
+
+    <!-- CREATOR WATERMARK -->
+    <div class="creator-watermark">
+        Created by <span>@zuhaiirra</span>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

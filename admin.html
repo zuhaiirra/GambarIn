@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | GambarIn!</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">G</div>
+            <div>
+                <h2>GambarIn<span>!</span></h2>
+                <small>Admin Panel</small>
+            </div>
+        </div>
+
+        <p class="menu-label">MENU UTAMA</p>
+        <nav class="sidebar-menu">
+            <button class="menu-item active" data-page="dashboard">
+                <span>▦</span> Dashboard
+            </button>
+            <button class="menu-item" data-page="artworks">
+                <span>▧</span> Kelola Artwork
+                <span class="menu-count" id="pendingBadge">0</span>
+            </button>
+            <button class="menu-item" data-page="users">
+                <span>♙</span> Kelola Pengguna
+            </button>
+            <button class="menu-item" data-page="orders">
+                <span>▤</span> Kelola Pesanan
+            </button>
+            <button class="menu-item" data-page="profile">
+                <span>⚙</span> Profil Admin
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="admin-mini-profile">
+                <div class="avatar" id="sidebarAvatar">A</div>
+                <div class="mini-info">
+                    <strong id="sidebarName">Admin</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+            <button class="logout-button" id="logoutButton">
+                ↪ Keluar
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h1 id="pageHeading">Dashboard</h1>
+                <p>Kelola aktivitas GambarIn! dari satu tempat.</p>
+            </div>
+            <div class="topbar-admin">
+                <div class="avatar" id="topbarAvatar">A</div>
+                <div>
+                    <strong id="topbarName">Admin</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+        <div id="globalMessage" class="global-message hidden"></div>
+
+        <!-- DASHBOARD -->
+        <section class="page-section" id="page-dashboard">
+            <div class="welcome-banner">
+                <div>
+                    <span class="eyebrow">ADMINISTRATOR PANEL</span>
+                    <h2>Halo, <span id="welcomeAdmin">Admin</span>!</h2>
+                    <p>Selamat datang. Pantau dan kelola aktivitas marketplace GambarIn! di sini.</p>
+                </div>
+                <div class="banner-art">✦</div>
+            </div>
+
+            <!-- STATISTIK -->
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <div class="stat-icon pink">♙</div>
+                    <div>
+                        <p>Total Pengguna</p>
+                        <h3 id="totalUsers">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon purple">▧</div>
+                    <div>
+                        <p>Total Artwork</p>
+                        <h3 id="totalArtworks">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon orange">◷</div>
+                    <div>
+                        <p>Menunggu Review</p>
+                        <h3 id="pendingArtworks">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon blue">▤</div>
+                    <div>
+                        <p>Total Pesanan</p>
+                        <h3 id="totalOrders">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon pink">♙</div>
+                    <div>
+                        <p>Total Buyer</p>
+                        <h3 id="totalBuyers">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon purple">♧</div>
+                    <div>
+                        <p>Total Seller</p>
+                        <h3 id="totalSellers">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon blue">⚙</div>
+                    <div>
+                        <p>Total Admin</p>
+                        <h3 id="totalAdmins">0</h3>
+                    </div>
+                </article>
+            </div>
+
+            <div class="content-card">
+                <div class="section-heading">
+                    <div>
+                        <h3>Artwork Menunggu Persetujuan</h3>
+                        <p>Periksa karya yang baru diunggah oleh Seller.</p>
+                    </div>
+                    <button class="text-button" data-go="artworks">Lihat semua →</button>
+                </div>
+                <div id="dashboardPending" class="artwork-review-grid">
+                    <p class="empty-state">Memuat artwork...</p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="section-heading">
+                    <div>
+                        <h3>Pesanan Terbaru</h3>
+                        <p>Pantau aktivitas pemesanan terbaru.</p>
+                    </div>
+                    <button class="text-button" data-go="orders">Lihat semua →</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Artwork</th>
+                                <th>Buyer</th>
+                                <th>Seller</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardOrders">
+                            <tr><td colspan="5">Memuat pesanan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARTWORK -->
+        <section class="page-section hidden" id="page-artworks">
+            <div class="section-intro">
+                <h2>Kelola Artwork</h2>
+                <p>Tinjau karya yang diunggah Seller sebelum ditampilkan kepada Buyer.</p>
+            </div>
+
+            <div class="filter-panel">
+                <input type="search" id="searchArtwork" placeholder="Cari judul artwork atau Seller...">
+                <select id="artworkStatusFilter">
+                    <option value="all">Semua Status</option>
+                    <option value="pending">Menunggu Review</option>
+                    <option value="approved">Disetujui</option>
+                    <option value="rejected">Ditolak</option>
+                </select>
+            </div>
+
+            <div id="adminArtworkList" class="artwork-review-grid">
+                <p class="empty-state">Memuat artwork...</p>
+            </div>
+        </section>
+
+        <!-- USERS -->
+        <section class="page-section hidden" id="page-users">
+            <div class="section-intro">
+                <h2>Kelola Pengguna</h2>
+                <p>Lihat informasi akun Buyer dan Seller yang terdaftar.</p>
+            </div>
+
+            <div class="filter-panel">
+                <input type="search" id="searchUser" placeholder="Cari nama atau username...">
+                <select id="userRoleFilter">
+                    <option value="all">Semua Role</option>
+                    <option value="buyer">Buyer</option>
+                    <option value="seller">Seller</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pengguna</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Tanggal Bergabung</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserList">
+                            <tr><td colspan="4">Memuat pengguna...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ORDERS -->
+        <section class="page-section hidden" id="page-orders">
+            <div class="section-intro">
+                <h2>Kelola Pesanan</h2>
+                <p>Pantau seluruh pesanan yang dibuat oleh Buyer.</p>
+            </div>
+
+            <div class="filter-panel">
+                <input type="search" id="searchOrder" placeholder="Cari artwork, buyer, seller, atau ID pesanan...">
+
+                <select id="orderStatusFilter">
+                    <option value="all">Semua Status</option>
+                    <option value="waiting_seller_quote">Menunggu Penawaran Seller</option>
+                    <option value="waiting_buyer_approval">Menunggu Persetujuan Buyer</option>
+                    <option value="waiting_payment">Menunggu Pembayaran</option>
+                    <option value="waiting_verification">Menunggu Verifikasi Pembayaran</option>
+                    <option value="confirmed">Pembayaran Terverifikasi</option>
+                    <option value="in_progress">Sedang Dikerjakan</option>
+                    <option value="revision">Revisi</option>
+                    <option value="completed">Selesai</option>
+                    <option value="cancelled">Dibatalkan</option>
+                </select>
+            </div>
+
+            <div class="content-card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Artwork</th>
+                                <th>Buyer</th>
+                                <th>Seller</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrderList">
+                            <tr><td colspan="6">Memuat pesanan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="page-section hidden" id="page-profile">
+            <div class="section-intro">
+                <h2>Profil Admin</h2>
+                <p>Informasi akun administrator GambarIn!.</p>
+            </div>
+
+            <div class="content-card profile-card">
+                <div class="profile-avatar" id="profileAvatar">A</div>
+
+                <form id="adminProfileForm">
+                    <label for="adminFullName">Nama Lengkap</label>
+                    <input type="text" id="adminFullName" required>
+
+                    <label for="adminUsername">Username</label>
+                    <input type="text" id="adminUsername">
+
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" disabled>
+
+                    <label for="adminBio">Bio</label>
+                    <textarea id="adminBio" rows="4" placeholder="Tuliskan deskripsi singkat..."></textarea>
+
+                    <button type="submit" class="primary-button">Simpan Perubahan</button>
+                    <p id="profileMessage" class="form-message"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- MODAL DETAIL ARTWORK -->
+<div class="modal-overlay hidden" id="artworkModal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeArtworkModal">×</button>
+        <div id="artworkModalContent"></div>
+    </div>
+</div>
+
+<!-- MODAL PENOLAKAN -->
+<div class="modal-overlay hidden" id="rejectModal">
+    <div class="modal-box small-modal">
+        <button class="modal-close" id="closeRejectModal">×</button>
+        <h3>Tolak Artwork</h3>
+        <p>Berikan alasan agar Seller mengetahui bagian yang perlu diperbaiki.</p>
+        <textarea id="rejectionReason" rows="4" placeholder="Tuliskan alasan penolakan..." required></textarea>
+        <button id="confirmRejectButton" class="danger-button">Tolak Artwork</button>
+        <p id="rejectMessage" class="form-message"></p>
+    </div>
+</div>
+
+<!-- MODAL DETAIL PESANAN -->
+<div class="modal-overlay hidden" id="orderModal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeOrderModal">×</button>
+        <div id="orderModalContent"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

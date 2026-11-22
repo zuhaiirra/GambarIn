@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard | GambarIn!</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="buyer.css">
+</head>
+<body>
+
+<div class="buyer-layout">
+
+    <aside class="sidebar">
+        <a href="index.html" class="logo">GambarIn<span>!</span></a>
+        <p class="sidebar-label">MENU UTAMA</p>
+
+        <nav class="sidebar-menu">
+            <button class="menu-item active" data-page="dashboard"><span>⌂</span> Dashboard</button>
+            <button class="menu-item" data-page="explore"><span>⌕</span> Explore Artwork</button>
+            <button class="menu-item" data-page="favorites"><span>♡</span> Favorite</button>
+            <button class="menu-item" data-page="orders"><span>▤</span> Pesanan Saya</button>
+            <button class="menu-item" data-page="profile"><span>♙</span> Profil Saya</button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="mini-profile">
+                <div class="avatar" id="sidebarAvatar">B</div>
+                <div class="mini-info">
+                    <h4 id="sidebarName">Buyer</h4>
+                    <p>Customer</p>
+                </div>
+            </div>
+            <button type="button" id="logoutButton" class="logout-button">
+                <span>↪</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2 id="pageHeading">Dashboard</h2>
+                <p>Selamat datang di GambarIn!</p>
+            </div>
+            <div class="topbar-user">
+                <div class="avatar" id="topbarAvatar">B</div>
+                <span id="topbarName">Buyer</span>
+            </div>
+        </header>
+
+        <div id="globalMessage" class="global-message"></div>
+
+        <section id="dashboard" class="page-section">
+            <div class="welcome-banner">
+                <div>
+                    <p>WELCOME TO GAMBARIN!</p>
+                    <h1>Temukan karya<br>yang <span>kamu suka.</span></h1>
+                    <p>Jelajahi ilustrasi kreatif dari para digital artist.</p>
+                    <button class="primary-button" data-go="explore">Jelajahi Artwork →</button>
+                </div>
+                <div class="banner-decoration">✿</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon pink">♡</div>
+                    <p>Favorite</p>
+                    <h2 id="totalFavorites">0</h2>
+                    <span>Karya tersimpan</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">▤</div>
+                    <p>Total Pesanan</p>
+                    <h2 id="totalOrders">0</h2>
+                    <span>Semua pesanan</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">◷</div>
+                    <p>Menunggu</p>
+                    <h2 id="pendingOrders">0</h2>
+                    <span>Pesanan diproses</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <p>Selesai</p>
+                    <h2 id="completedOrders">0</h2>
+                    <span>Pesanan selesai</span>
+                </div>
+            </div>
+
+            <div class="section-heading">
+                <div>
+                    <h3>Artwork Pilihan</h3>
+                    <p>Temukan karya menarik untuk kamu.</p>
+                </div>
+                <button class="text-button" data-go="explore">Lihat semua →</button>
+            </div>
+
+            <div id="dashboardArtwork" class="artwork-grid">
+                <div class="loading-state">Memuat artwork...</div>
+            </div>
+
+            <div class="section-heading order-heading">
+                <div>
+                    <h3>Pesanan Terbaru</h3>
+                    <p>Pantau pesanan yang sudah kamu buat.</p>
+                </div>
+                <button class="text-button" data-go="orders">Lihat semua →</button>
+            </div>
+
+            <div id="dashboardOrders" class="order-list"></div>
+        </section>
+
+        <section id="explore" class="page-section hidden">
+            <div class="section-intro">
+                <h1>Explore Artwork</h1>
+                <p>Temukan ilustrasi digital dari berbagai artist.</p>
+            </div>
+
+            <div class="filter-panel">
+                <input type="search" id="searchArtwork" placeholder="Cari judul artwork...">
+
+                <select id="categoryFilter">
+                    <option value="">Semua Kategori</option>
+                    <option value="Illustration">Illustration</option>
+                    <option value="Character Design">Character Design</option>
+                    <option value="Portrait">Portrait</option>
+                    <option value="Poster">Poster</option>
+                    <option value="Logo">Logo</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <select id="sortArtwork">
+                    <option value="newest">Terbaru</option>
+                    <option value="cheapest">Harga terendah</option>
+                    <option value="expensive">Harga tertinggi</option>
+                </select>
+            </div>
+
+            <div id="exploreArtwork" class="artwork-grid">
+                <div class="loading-state">Memuat artwork...</div>
+            </div>
+        </section>
+
+        <section id="favorites" class="page-section hidden">
+            <div class="section-intro">
+                <h1>Favorite Saya</h1>
+                <p>Kumpulan artwork yang kamu simpan.</p>
+            </div>
+            <div id="favoriteArtwork" class="artwork-grid"></div>
+        </section>
+
+        <section id="orders" class="page-section hidden">
+            <div class="section-intro">
+                <h1>Pesanan Saya</h1>
+                <p>Lihat dan pantau semua pesananmu.</p>
+            </div>
+
+            <div class="filter-panel">
+                <select id="orderFilter">
+                    <option value="">Semua Status</option>
+                    <option value="pending">Menunggu</option>
+                    <option value="confirmed">Dikonfirmasi</option>
+                    <option value="completed">Selesai</option>
+                    <option value="cancelled">Dibatalkan</option>
+                </select>
+            </div>
+
+            <div id="orderList" class="order-list"></div>
+        </section>
+
+        <section id="profile" class="page-section hidden">
+            <div class="section-intro">
+                <h1>Profil Saya</h1>
+                <p>Kelola informasi akun GambarIn! kamu.</p>
+            </div>
+
+            <div class="content-card profile-card">
+                <div class="profile-avatar-section">
+                    <div class="avatar large-avatar" id="profileAvatarPreview">B</div>
+                    <div>
+                        <h3>Foto Profil</h3>
+                        <p>Perbarui identitas akunmu.</p>
+                        <label for="profileAvatar" class="upload-label">Pilih Foto</label>
+                        <input type="file" id="profileAvatar" accept="image/png,image/jpeg,image/webp" hidden>
+                    </div>
+                </div>
+
+                <form id="profileForm">
+                    <label for="profileName">Nama Lengkap</label>
+                    <input type="text" id="profileName" required maxlength="80">
+
+                    <label for="profileUsername">Username</label>
+                    <input type="text" id="profileUsername" maxlength="30" placeholder="@username">
+
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail" readonly>
+
+                    <label for="profileBio">Bio</label>
+                    <textarea id="profileBio" maxlength="300" placeholder="Ceritakan sedikit tentang dirimu..."></textarea>
+
+                    <button type="submit" class="primary-button">Simpan Perubahan</button>
+                </form>
+
+                <p id="profileMessage" class="form-message"></p>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div class="modal-overlay hidden" id="artworkModal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeArtworkModal">×</button>
+        <div id="artworkModalContent"></div>
+    </div>
+</div>
+
+<!-- MODAL PEMESANAN -->
+<div class="modal-overlay hidden" id="orderModal">
+    <div class="modal-box order-modal-box">
+        <button class="modal-close" id="closeOrderModal">×</button>
+        <h2>Pesan Artwork</h2>
+        <p class="modal-subtitle">Lengkapi spesifikasi karya yang kamu inginkan.</p>
+
+        <div id="orderArtworkInfo"></div>
+
+        <form id="orderForm">
+
+            <label for="orderSize">Ukuran Artwork *</label>
+            <input
+                type="text"
+                id="orderSize"
+                placeholder="Contoh: A4, A3, 1080 × 1080 px"
+                maxlength="100"
+                required
+            >
+
+            <label for="orderResolution">Resolusi *</label>
+            <select id="orderResolution" required>
+                <option value="">Pilih resolusi</option>
+                <option value="72 DPI">72 DPI</option>
+                <option value="150 DPI">150 DPI</option>
+                <option value="300 DPI">300 DPI</option>
+                <option value="600 DPI">600 DPI</option>
+                <option value="Custom">Custom / Sesuai kebutuhan</option>
+            </select>
+
+            <label for="orderFileFormat">Format File *</label>
+            <select id="orderFileFormat" required>
+                <option value="">Pilih format file</option>
+                <option value="JPG">JPG</option>
+                <option value="PNG">PNG</option>
+                <option value="PDF">PDF</option>
+                <option value="PSD">PSD</option>
+                <option value="AI">AI</option>
+                <option value="SVG">SVG</option>
+                <option value="Other">Lainnya / Diskusikan dengan Seller</option>
+            </select>
+
+            <label for="orderQuantity">Jumlah Pesanan *</label>
+            <input
+                type="number"
+                id="orderQuantity"
+                min="1"
+                max="100"
+                value="1"
+                required
+            >
+
+            <label for="orderWhatsapp">Nomor WhatsApp</label>
+            <input
+                type="tel"
+                id="orderWhatsapp"
+                placeholder="Contoh: 08xxxxxxxxxx"
+                maxlength="20"
+            >
+
+            <label for="orderBrief">Brief / Detail Permintaan *</label>
+            <textarea
+                id="orderBrief"
+                rows="5"
+                maxlength="2000"
+                placeholder="Jelaskan konsep, tema, warna, referensi, atau detail desain yang kamu inginkan..."
+                required
+            ></textarea>
+
+            <label for="orderNote">Catatan Tambahan untuk Seller</label>
+            <textarea
+                id="orderNote"
+                rows="3"
+                maxlength="500"
+                placeholder="Tuliskan catatan tambahan jika ada..."
+            ></textarea>
+
+            <button type="submit" class="primary-button full-button" id="submitOrderButton">
+                Buat Pesanan
+            </button>
+        </form>
+
+        <p id="orderMessage" class="form-message"></p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="buyer.js"></script>
+
+</body>
+</html>
